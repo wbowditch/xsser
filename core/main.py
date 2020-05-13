@@ -1464,6 +1464,9 @@ class xsser(EncoderDecoder, XSSerReporter):
         """
         Add an attack that failed to inject
         """
+        print("Still do a reverse check even though hash failed")
+        self.hash_found.append((dest_url, "[hashing check]", method, hashing, query_string, payload, orig_url))
+        self.do_token_check(orig_url, hashing, payload, query_string, dest_url)
         if method == "heuristic":
             self.report(" [NOT FOUND] -> [ " + str(payload) + " ] : [ " + str(hashing)+ " ]")
             self.hash_notfound.append((dest_url, "[Heuristic test]", method, hashing, query_string, payload, orig_url))
@@ -1526,7 +1529,7 @@ class xsser(EncoderDecoder, XSSerReporter):
             options.add_argument("-app")
             options.add_argument("-safe-mode")
             current_dir = os.getcwd()
-            driver = webdriver.Firefox(options=options, firefox_profile=profile, executable_path=current_dir+"/core/driver/geckodriver", log_path=os.devnull) # wrapping!
+            driver = webdriver.Firefox(options=options, firefox_profile=profile, executable_path="/usr/local/bin/geckodriver", log_path=os.devnull) # wrapping!
         except:
             driver = None
             self.token_arrived_flag = False
